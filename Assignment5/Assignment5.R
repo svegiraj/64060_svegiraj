@@ -72,11 +72,11 @@ rect.hclust(w_hc,k=2,border = 1:2)
 
 #For identifying clusters, cut the dendrogram with cutree()
 
-clust1<-cutree(w_hc, k=2)
+clust<-cutree(w_hc, k=2)
 
 # Number of members in each cluster
 
-table(clust1)
+table(clust)
 
 #k=2 is cutting the longest path, so I choose k=2.
 
@@ -90,6 +90,9 @@ Cereals_New<-Cereals
 #Removing any missing values that might be present in the data
 
 nd<-na.omit(Cereals_New) 
+nd1<-nd[,c(-1,-2,-3)]
+nd2<-scale(nd1)
+nd3<-as.data.frame(nd2)
 
 #Divide the data and create partitions
 p1<-nd[1:55,]
@@ -127,23 +130,23 @@ for(i in 1:nrow(p2))
   d1[i,2]<-which.min(y2[i+2,1:2])
 }
 d1
-y3<-as.data.frame(cbind(CSF1,clust1))
-cbind(y3$clust1[56:74],d1$clusters)
-table(y3$clust1[56:74]==d1$clusters)
+y3<-as.data.frame(cbind(CSF1,clust))
+cbind(y3$clust[56:74],d1$clusters)
+table(y3$clust[56:74]==d1$clusters)
 
-#Stability of the model: Accuracy = 78.94% (15/19)
+#From the above observed values, we can say that the clusters are fairly stable.
 
 #Q4)Healthy cereals
-r<-cbind(nd,clust1)
-r[r$clust1==1,]
-r[r$clust1==2,]
+
+r<-cbind(nd3,clust)
+r[r$clust==1,]
+r[r$clust==2,]
 
 #Calculating mean ratings to determine the best cluster.
 
-mean(r[r$clust1==1,"rating"])
-mean(r[r$clust1==2,"rating"])
+mean(r[r$clust==1,"rating"])
+mean(r[r$clust==2,"rating"])
 
-# Cluster 1 has high rating values, So we can infer this cluster has more nutrition values.
-# Since we using distance metric algorithm we essentially need to normalize data, as the features of data are different, hence we need to scale it to similar features.
-# Also, Normalization is used to eliminate redundant data and ensures that good quality clusters are generated which can improve the clustering algorithm. So we need to do normalization.
+#From the above cluster analysis, as Cluster 1 has high rating values, we can infer this cluster has more nutrition values.So Cluster1 is healthy for kids
 
+#Since we using distance metric algorithm we essentially need to normalize data, as the features of data are different, hence we need to scale it to similar features.
